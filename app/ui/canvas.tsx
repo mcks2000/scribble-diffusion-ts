@@ -1,4 +1,3 @@
-// import * as React from "react";
 import React, { useRef, useEffect } from "react";
 import { ReactSketchCanvas, type CanvasPath, type ReactSketchCanvasRef } from "react-sketch-canvas";
 

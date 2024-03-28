@@ -1,5 +1,5 @@
 import packageData from "../../package.json";
-import dataUriToBuffer from "@/app/lib/data-uri-to-buffer";
+import dataUriToBuffer from "@/app/lib/utils/data-uri-to-buffer";
 import * as Bytescale from "@bytescale/sdk";
 
 const UPLOAD_IO_ACCOUNT_ID = "12a1yt2";

@@ -1,8 +1,8 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import Replicate from "replicate";
 import packageData from "../../../../package.json";
 
-export async function GET(req: Request, { params }: { params: { id: string } }) {
+export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
     const authHeader = req.headers.get("authorization");
     let replicate_api_token = "";
     if (authHeader) {

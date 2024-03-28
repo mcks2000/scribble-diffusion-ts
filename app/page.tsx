@@ -7,17 +7,16 @@ import pkg from "../package.json";
 import Canvas from "@/app/ui/canvas";
 import Welcome from "@/app/ui/welcome";
 import PromptForm from "@/app/ui/prompt-form";
-import Predictions from "@/app/ui/predictions";
-import Error from "@/app/lib/error";
+import Predictions from "@/app/ui/prediction/predictions";
+import Error from "@/app/ui/error";
 import naughtyWords from "naughty-words";
 import uploadFile from "@/app/lib/upload";
-import qs from 'qs';
-import type { PredictionReqParams, PredictionsEntry } from "@/app/lib/definitions";
+import type { PredictionsEntry } from "@/app/lib/definitions";
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 
 const HOST = process.env.VERCEL_URL
-  ? `https://${process.env.VERCEL_URL}`
+  ? process.env.VERCEL_URL
   : "http://localhost:3000";
 
 
@@ -32,19 +31,6 @@ export default function Home() {
   const [initialPrompt] = useState(seed.prompt);
   const [scribble, setScribble] = useState<string | null>(null);
   const [welcomeOpen, setWelcomeOpen] = useState(false);
-
-  // const function handleSubmit(params:type) {
-
-  // }
-
-  // 添加一个方法，判断localStorage.getItem("replicate_api_token") 是否存在，如果不存在就弹出提示框
-  // 如果存在就不弹
-  // 如果用户点击了提示框的按钮，则删除 localStorage.getItem("replicate_api_token")
-  // 如果用户点击了提示框的按钮，并且 localStorage.getItem("replicate_api_token") 不存在，则弹出提示框
-
-
-
-
 
 
   async function handleSubmit(promptt: string) {
@@ -70,8 +56,6 @@ export default function Home() {
       replicate_api_token: localStorage.getItem("replicate_api_token"),
     };
 
-    // 将 body 赋值给  new FormData
-
 
     const response = await fetch("/api/predictions", {
       method: "POST",
@@ -82,12 +66,14 @@ export default function Home() {
     });
     let prediction = await response.json();
 
-
+    console.log("prediction1", prediction);
 
     setPredictions((predictions) => ({
       ...predictions,
       [prediction.id]: prediction,
     }));
+
+    console.log("prediction2", prediction);
 
     if (response.status !== 201) {
       setError(prediction.detail);
@@ -98,7 +84,7 @@ export default function Home() {
       prediction.status !== "succeeded" &&
       prediction.status !== "failed"
     ) {
-      await sleep(1000);
+      await sleep(10000);
       const response = await fetch(`/api/predictions/${prediction.id}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem(
@@ -107,6 +93,7 @@ export default function Home() {
         },
       });
       prediction = await response.json();
+      console.log("prediction-get", prediction);
       setPredictions((predictions) => ({
         ...predictions,
         [prediction.id]: prediction,
@@ -116,15 +103,10 @@ export default function Home() {
         return;
       }
     }
-
+    console.log("prediction4", prediction);
     setIsProcessing(false);
   };
 
-  // async function handleTokenSubmit() {
-  //   console.log("replicate_api_token", e.target[0].value);
-  //   localStorage.setItem("replicate_api_token", e.target[0].value);
-  //   setWelcomeOpen(false);
-  // };
 
   useEffect(() => {
     const replicateApiToken = localStorage.getItem("replicate_api_token");
