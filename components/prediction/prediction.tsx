@@ -5,16 +5,14 @@ import { Copy as CopyIcon, PlusCircle as PlusCircleIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import Loader from "@/app/components/loader";
-import type { PredictionsEntry } from "@/app/lib/definitions";
+import { Loader } from "@/components/loader";
+import type { PredictionsEntry } from "@/types/predictions";
 
 
-export default function Prediction({ prediction, showLinkToNewScribble }: {
+const Prediction = ({ prediction, showLinkToNewScribble }: {
   prediction: PredictionsEntry,
   showLinkToNewScribble?: boolean
-}) {
-
-  console.log("Prediction.tsx", prediction)
+}) => {
 
   const [linkCopied, setLinkCopied] = useState(false);
 
@@ -34,7 +32,6 @@ export default function Prediction({ prediction, showLinkToNewScribble }: {
     return () => clearInterval(intervalId);
   }, []);
 
-  if (!prediction) return null;
 
   return (
     <div className="mt-6 mb-12" >
@@ -89,3 +86,6 @@ export default function Prediction({ prediction, showLinkToNewScribble }: {
     </div>
   );
 }
+
+
+export default Prediction;

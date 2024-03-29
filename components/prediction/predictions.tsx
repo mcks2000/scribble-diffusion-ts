@@ -1,13 +1,15 @@
-import { Fragment, useEffect, useRef, useState } from "react";
-import Loader from "@/app/components/loader";
-import type { PredictionsEntry } from "@/app/lib/definitions";
-import Prediction from "@/app/ui/prediction/prediction";
+'use client';
 
-export default function Predictions({ predictions, isProcessing, submissionCount }: {
+import { Fragment, useEffect, useRef } from "react";
+import { Loader } from "@/components/loader";
+import type { PredictionsEntry } from "@/types/predictions";
+import Prediction from "@/components/prediction/prediction";
+
+const Predictions = ({ predictions, isProcessing, submissionCount }: {
   predictions: PredictionsEntry[],
   isProcessing: boolean,
   submissionCount: number
-}) {
+}) => {
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -17,9 +19,8 @@ export default function Predictions({ predictions, isProcessing, submissionCount
         scroll.scrollIntoView({ behavior: "smooth" });
       }
     }
-  }, [predictions, submissionCount]);
+  }, [submissionCount]);
 
-  if (submissionCount === 0) return;
 
   return (
     <section className="w-full my-10" >
@@ -50,5 +51,10 @@ export default function Predictions({ predictions, isProcessing, submissionCount
           ))
       }
     </section>
+
   );
 }
+export default Predictions;
+
+
+

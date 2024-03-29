@@ -3,12 +3,10 @@ import { useEffect, useState } from "react";
 export default function PromptForm({
   initialPrompt,
   onSubmit,
-  isProcessing,
   scribbleExists,
 }: {
   initialPrompt: string,
   onSubmit: (data: string) => void,
-  isProcessing: boolean,
   scribbleExists: boolean
 }) {
   const [prompt, setPrompt] = useState(initialPrompt);

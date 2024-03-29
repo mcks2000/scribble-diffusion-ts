@@ -1,22 +1,11 @@
-export type pathsData = {
-  drawMode: boolean;
-  strokeColor: string;
-  strokeWidth: number;
-  paths: { x: number; y: number; }[];
-  startTimestamp: number;
-  endTimestamp: number;
-}[]
-
-
-
-export type PredictionReqParams = {
+type PredictionReqParams = {
   prompt: string;
   image: string,
   structure: string,
-  replicate_api_token: string,
+  replicate_api_token: string | null,
 }
 
-export type PredictionsEntry = {
+type PredictionsEntry = {
   id: string;
   uuid: string;
   output: string;
@@ -39,3 +28,6 @@ export type PredictionsEntry = {
   };
   webhook_events_filter: [number];
 }
+
+
+export type { PredictionReqParams, PredictionsEntry }

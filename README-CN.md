@@ -42,8 +42,9 @@ bun dev
 
 ## TODO
 - 优化获取，轮训
+- 允许上传图片并显示
 - 获取的数据存到数据库 ，请求参数 http://localhost:3001/api/predictions/rgeklgtbs5o662tflqjcbctfxi
-  ```
+  ```text
    {
   id: 'vd5xbodbg5v3gtuo6azckwmbxa',
   model: 'jagilley/controlnet-scribble',
@@ -88,7 +89,7 @@ bun dev
   created_at: '2024-03-28T07:42:52.163874Z',
   started_at: '2024-03-28T07:42:57.746954Z',
   completed_at: '2024-03-28T07:43:01.801466Z',
-  webhook: 'http://localhost:3001/api/replicate-webhook',
+  webhook: 'http://localhost:3000/api/replicate-webhook',
   webhook_events_filter: [ 'start', 'completed' ],
   urls: {
     cancel: 'https://api.replicate.com/v1/predictions/vd5xbodbg5v3gtuo6azckwmbxa/cancel',

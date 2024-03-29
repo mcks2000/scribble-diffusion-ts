@@ -7,7 +7,6 @@ import { NextRequest, NextResponse } from 'next/server'
 export async function POST(req: NextRequest) {
   const prediction = await req.json();
   const id = prediction.id;
-  console.log("received webhook for prediction: ", id);
   // await upsertPrediction(req.body);
 
   return NextResponse.json(id)

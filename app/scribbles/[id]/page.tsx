@@ -1,5 +1,5 @@
 
-import Prediction from "@/app/ui/prediction/prediction";
+import Prediction from "@/components/prediction/prediction";
 import Head from "next/head";
 import pkg from "../../../package.json";
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
@@ -7,17 +7,14 @@ const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 const HOST = process.env.VERCEL_URL
     ? process.env.VERCEL_URL
-    : "http://localhost:3000";
+    : process.env.NGROK_HOST;
 
 
 export default async function Page({ params, baseUrl }: { params: { id: string }, baseUrl: string }) {
     await sleep(10000);
-    console.log("params", `${HOST}/api/predictions/${params.id}`);
 
     const response = await fetch(`${HOST}/api/predictions/${params.id}`);
-
     const prediction = await response.json();
-    console.log("prediction-[id]-Page", prediction);
 
 
     return (

@@ -1,6 +1,5 @@
 import React, { useRef, useEffect } from "react";
 import { ReactSketchCanvas, type CanvasPath, type ReactSketchCanvasRef } from "react-sketch-canvas";
-
 import { Undo as UndoIcon, Trash as TrashIcon } from "lucide-react";
 
 
@@ -28,6 +27,7 @@ export default function Canvas({
     loadStartingPaths();
   }, []);
 
+
   async function loadStartingPaths() {
     const canvas = canvasRef.current;
     if (canvas) {
@@ -44,9 +44,6 @@ export default function Canvas({
     if (!canvas) return;
     const paths = await canvas.exportPaths();
     localStorage.setItem("paths", JSON.stringify(paths, null, 2));
-
-
-    if (!paths.length) return;
 
     setScribbleExists(true);
 
