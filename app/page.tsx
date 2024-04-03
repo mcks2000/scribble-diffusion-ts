@@ -1,25 +1,18 @@
 "use client"
 
-import Image from "next/image";
 import { useState, useEffect } from "react";
-import seeds from "@/app/lib/seeds";
-import pkg from "../package.json";
-import Canvas from "@/app/ui/canvas";
-import Welcome from "@/app/ui/welcome";
-import PromptForm from "@/app/ui/prompt-form";
-import Predictions from "@/app/ui/predictions";
-import Error from "@/app/lib/error";
 import naughtyWords from "naughty-words";
-import uploadFile from "@/app/lib/upload";
-import qs from 'qs';
-import type { PredictionReqParams, PredictionsEntry } from "@/app/lib/definitions";
+import seeds from "@/lib/seeds";
+import pkg from "../package.json";
+import Canvas from "@/components/ui/canvas";
+import Welcome from "@/components/ui/welcome";
+import PromptForm from "@/components/ui/prompt-form";
+import Predictions from "@/components/prediction/predictions";
+import CustomError from "@/components/ui/error";
+import uploadFile from "@/lib/upload";
+import type { PredictionReqParams, PredictionsEntry } from "@/types/predictions";
+import { createPredictions, getPredictions } from "@/lib/client_actions";
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
-
-
-const HOST = process.env.VERCEL_URL
-  ? `https://${process.env.VERCEL_URL}`
-  : "http://localhost:3000";
-
 
 
 export default function Home() {
@@ -32,19 +25,6 @@ export default function Home() {
   const [initialPrompt] = useState(seed.prompt);
   const [scribble, setScribble] = useState<string | null>(null);
   const [welcomeOpen, setWelcomeOpen] = useState(false);
-
-  // const function handleSubmit(params:type) {
-
-  // }
-
-  // 添加一个方法，判断localStorage.getItem("replicate_api_token") 是否存在，如果不存在就弹出提示框
-  // 如果存在就不弹
-  // 如果用户点击了提示框的按钮，则删除 localStorage.getItem("replicate_api_token")
-  // 如果用户点击了提示框的按钮，并且 localStorage.getItem("replicate_api_token") 不存在，则弹出提示框
-
-
-
-
 
 
   async function handleSubmit(promptt: string) {
@@ -60,53 +40,38 @@ export default function Home() {
 
     setError(null);
     setIsProcessing(true);
+
     if (!scribble) return;
     const fileUrl = await uploadFile(scribble);
 
-    const jsonData = {
-      prompt,
-      image: fileUrl,
-      structure: "scribble",
-      replicate_api_token: localStorage.getItem("replicate_api_token"),
-    };
 
-    // 将 body 赋值给  new FormData
-
-
-    const response = await fetch("/api/predictions", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(jsonData),
-    });
+    const response = await createPredictions(prompt, fileUrl);
     let prediction = await response.json();
-
+    console.log("prediction1", prediction);
 
 
     setPredictions((predictions) => ({
       ...predictions,
       [prediction.id]: prediction,
     }));
+    console.log("prediction2", prediction);
+
 
     if (response.status !== 201) {
       setError(prediction.detail);
       return;
     }
 
+
     while (
       prediction.status !== "succeeded" &&
       prediction.status !== "failed"
     ) {
-      await sleep(1000);
-      const response = await fetch(`/api/predictions/${prediction.id}`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem(
-            "replicate_api_token"
-          )}`,
-        },
-      });
+      await sleep(15 * 1000);
+      const response = await getPredictions(prediction.id);
       prediction = await response.json();
+      console.log("prediction-get", prediction);
+
       setPredictions((predictions) => ({
         ...predictions,
         [prediction.id]: prediction,
@@ -117,18 +82,15 @@ export default function Home() {
       }
     }
 
+
     setIsProcessing(false);
+    console.log("prediction4", prediction);
   };
 
-  // async function handleTokenSubmit() {
-  //   console.log("replicate_api_token", e.target[0].value);
-  //   localStorage.setItem("replicate_api_token", e.target[0].value);
-  //   setWelcomeOpen(false);
-  // };
 
+  // useEffect后面的空数组 [] 表示这个副作用只会在组件初始渲染时执行一次，之后组件重新渲染时都不会执行。
   useEffect(() => {
     const replicateApiToken = localStorage.getItem("replicate_api_token");
-
     if (replicateApiToken) {
       setWelcomeOpen(false);
     } else {
@@ -162,11 +124,10 @@ export default function Home() {
           <PromptForm
             initialPrompt={initialPrompt}
             onSubmit={handleSubmit}
-            isProcessing={isProcessing}
             scribbleExists={scribbleExists}
           />
 
-          <Error error={error} />
+          <CustomError error={error} />
         </div>
       )}
 
@@ -176,6 +137,5 @@ export default function Home() {
         submissionCount={submissionCount}
       />
     </main>
-    // <Script src="https://js.bytescale.com/upload-js-full/v1" />
   );
 }

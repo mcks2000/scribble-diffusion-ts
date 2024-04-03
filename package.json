@@ -1,9 +1,9 @@
 {
   "name": "scribble-diffusion-ts",
-  "description": "Turn your sketch into a refined image using AI",
-  "appName": "Scribble Diffusion",
-  "appSubtitle": "Turn your sketch into a refined image using AI",
-  "appMetaDescription": "Turn your sketch into a refined image using AI",
+  "description": "利用人工智能将草图转化为精致的图像",
+  "appName": "爱上涂鸦",
+  "appSubtitle": "利用人工智能将草图转化为精致的图像",
+  "appMetaDescription": "利用人工智能将草图转化为精致的图像",
   "version": "1.0.0",
   "private": true,
   "scripts": {
@@ -39,7 +39,7 @@
     "eslint": "^8",
     "eslint-config-next": "14.1.4",
     "postcss": "^8",
-    "tailwindcss": "^3.3.0",
+    "tailwindcss": "^3.4.3",
     "typescript": "^5"
   }
 }

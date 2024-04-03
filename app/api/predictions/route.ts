@@ -1,15 +1,14 @@
 
-import { NextResponse } from "next/server";
+import { type NextRequest,NextResponse } from "next/server";
 import Replicate from "replicate";
 import packageData from "../../../package.json";
 
 
 const WEBHOOK_HOST = process.env.VERCEL_URL
-    ? `https://${process.env.VERCEL_URL}`
+    ? process.env.VERCEL_URL
     : process.env.NGROK_HOST;
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
     const input = await request.json();
-    const inpu1t = input.prompt11;
 
     const { replicate_api_token, ...restInput } = input;
 

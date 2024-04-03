@@ -1,65 +1,19 @@
+'use client';
+
 import copy from "copy-to-clipboard";
 import { Copy as CopyIcon, PlusCircle as PlusCircleIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { Fragment, useEffect, useRef, useState } from "react";
-import Loader from "@/app/ui/loader";
-import type { PredictionsEntry } from "@/app/lib/definitions";
+import { useEffect, useState } from "react";
+import { Loader } from "@/components/loader";
+import type { PredictionsEntry } from "@/types/predictions";
 
-export default function Predictions({ predictions, isProcessing, submissionCount }: {
-  predictions: PredictionsEntry[],
-  isProcessing: boolean,
-  submissionCount: number
-}) {
-  const scrollRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    if (submissionCount > 0) {
-      const scroll = scrollRef.current;
-      if (scroll) {
-        scroll.scrollIntoView({ behavior: "smooth" });
-      }
-    }
-  }, [predictions, submissionCount]);
-
-  if (submissionCount === 0) return;
-
-  return (
-    <section className="w-full my-10" >
-      <h2 className="text-center text-3xl font-bold m-6" > Results </h2>
-
-      {
-        submissionCount > Object.keys(predictions).length && (
-          <div className="pb-10 mx-auto w-full text-center" >
-            <div className="pt-10" ref={scrollRef} />
-            <Loader />
-          </div>
-        )
-      }
-
-      {
-        Object.values(predictions)
-          .slice()
-          .reverse()
-          .map((prediction, index) => (
-            <Fragment key={prediction.id} >
-              {index === 0 &&
-                submissionCount === Object.keys(predictions).length && (
-                  <div ref={scrollRef} />
-                )
-              }
-              <Prediction prediction={prediction} />
-            </Fragment>
-          ))
-      }
-    </section>
-  );
-}
-
-export function Prediction({ prediction, showLinkToNewScribble }: {
+const Prediction = ({ prediction, showLinkToNewScribble }: {
   prediction: PredictionsEntry,
   showLinkToNewScribble?: boolean
-}) {
+}) => {
+
   const [linkCopied, setLinkCopied] = useState(false);
 
   const copyLink = () => {
@@ -78,7 +32,6 @@ export function Prediction({ prediction, showLinkToNewScribble }: {
     return () => clearInterval(intervalId);
   }, []);
 
-  if (!prediction) return null;
 
   return (
     <div className="mt-6 mb-12" >
@@ -133,3 +86,6 @@ export function Prediction({ prediction, showLinkToNewScribble }: {
     </div>
   );
 }
+
+
+export default Prediction;
