@@ -11,7 +11,6 @@ const HOST = process.env.VERCEL_URL
 
 
 export default async function Page({ params, baseUrl }: { params: { id: string }, baseUrl: string }) {
-    await sleep(10000);
 
     const response = await fetch(`${HOST}/api/predictions/${params.id}`);
     const prediction = await response.json();

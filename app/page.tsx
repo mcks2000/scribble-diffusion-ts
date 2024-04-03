@@ -45,7 +45,7 @@ export default function Home() {
     const fileUrl = await uploadFile(scribble);
 
 
-    let response = await createPredictions(prompt, fileUrl);
+    const response = await createPredictions(prompt, fileUrl);
     let prediction = await response.json();
     console.log("prediction1", prediction);
 

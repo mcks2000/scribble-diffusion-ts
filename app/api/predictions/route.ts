@@ -1,5 +1,5 @@
 
-import { NextRequest,NextResponse } from "next/server";
+import { type NextRequest,NextResponse } from "next/server";
 import Replicate from "replicate";
 import packageData from "../../../package.json";
 

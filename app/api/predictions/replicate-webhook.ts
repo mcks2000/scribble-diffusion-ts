@@ -2,7 +2,7 @@
 // Identical webhooks can be sent multiple times, so this handler must be idempotent.
 
 // import { upsertPrediction } from "@/app/lib/prisma/db";
-import { NextRequest, NextResponse } from 'next/server'
+import { type NextRequest, NextResponse } from 'next/server'
 
 export async function POST(req: NextRequest) {
   const prediction = await req.json();
